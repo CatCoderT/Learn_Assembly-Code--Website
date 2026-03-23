@@ -1,1 +1,1040 @@
-Please wait... [adding the feature]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C Programming — OS Dev Path</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;600;700&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #0f0f1a;
+    --bg3: #141420;
+    --accent: #7fff7f;
+    --accent2: #4fc3f7;
+    --accent3: #ff79c6;
+    --dim: #444466;
+    --text: #ccd6f6;
+    --text-dim: #8892b0;
+    --border: #1e1e30;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  .layout { display: flex; min-height: 100vh; }
+
+  nav {
+    width: 260px;
+    min-width: 260px;
+    background: var(--bg2);
+    border-right: 1px solid var(--border);
+    padding: 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .nav-logo {
+    padding: 0 24px 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+
+  .nav-logo .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .nav-logo h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.3;
+  }
+
+  .nav-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--dim);
+    text-transform: uppercase;
+    padding: 0 24px 8px;
+    margin-top: 8px;
+  }
+
+  nav a {
+    display: block;
+    padding: 8px 24px;
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 400;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  nav a:hover, nav a.active {
+    color: var(--accent);
+    background: rgba(127,255,127,0.04);
+    border-left-color: var(--accent);
+  }
+
+  .nav-next {
+    margin-top: auto;
+    padding: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-next a {
+    display: block;
+    padding: 12px 16px;
+    background: rgba(127,255,127,0.06);
+    border: 1px solid rgba(127,255,127,0.15);
+    border-radius: 8px;
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    transition: all 0.15s;
+  }
+
+  .nav-next a:hover { background: rgba(127,255,127,0.1); border-left: 1px solid rgba(127,255,127,0.15); }
+
+  .nav-next-label {
+    font-size: 10px;
+    color: var(--dim);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+  }
+
+  main {
+    flex: 1;
+    max-width: 860px;
+    padding: 60px 64px;
+    overflow-x: hidden;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    scroll-margin-top: 40px;
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-size: 42px;
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+
+  h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin: 32px 0 12px;
+  }
+
+  p {
+    color: var(--text-dim);
+    font-size: 15px;
+    margin-bottom: 16px;
+    max-width: 680px;
+  }
+
+  strong { color: var(--text); font-weight: 600; }
+
+  .code-block {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.02);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .code-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 1px;
+  }
+
+  pre {
+    padding: 20px;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .kw  { color: #ff79c6; }
+  .typ { color: #4fc3f7; }
+  .num { color: #f1fa8c; }
+  .cmt { color: #444466; font-style: italic; }
+  .fn  { color: #7fff7f; }
+  .str { color: #ffb86c; }
+  .op  { color: #ccd6f6; }
+
+  .reg-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 13px;
+  }
+
+  .reg-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--bg3);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .reg-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 13px;
+  }
+
+  .reg-table td:first-child {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 13px;
+  }
+
+  .reg-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .callout {
+    background: rgba(127,255,127,0.04);
+    border: 1px solid rgba(127,255,127,0.15);
+    border-left: 3px solid var(--accent);
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--text-dim);
+    max-width: 680px;
+  }
+
+  .callout.blue {
+    background: rgba(79,195,247,0.04);
+    border-color: rgba(79,195,247,0.15);
+    border-left-color: var(--accent2);
+  }
+
+  .callout.pink {
+    background: rgba(255,121,198,0.04);
+    border-color: rgba(255,121,198,0.15);
+    border-left-color: var(--accent3);
+  }
+
+  .callout strong { color: white; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+
+  .badge-green { background: rgba(127,255,127,0.1); color: var(--accent); border: 1px solid rgba(127,255,127,0.2); }
+  .badge-blue  { background: rgba(79,195,247,0.1);  color: var(--accent2); border: 1px solid rgba(79,195,247,0.2); }
+  .badge-pink  { background: rgba(255,121,198,0.1); color: var(--accent3); border: 1px solid rgba(255,121,198,0.2); }
+
+  .hero-sub {
+    font-size: 17px;
+    color: var(--text-dim);
+    max-width: 560px;
+    margin-bottom: 32px;
+  }
+
+  .progress-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  .inst-grid {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0;
+  }
+
+  .inst-grid .cell {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .inst-grid .cell:nth-child(odd) {
+    background: var(--bg3);
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent3);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .inst-grid .cell:nth-child(even) {
+    color: var(--text-dim);
+    background: var(--bg2);
+  }
+
+  .inst-grid .cell:last-child,
+  .inst-grid .cell:nth-last-child(2) { border-bottom: none; }
+
+  .scrolltop {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .scrolltop:hover { border-color: var(--accent); background: rgba(127,255,127,0.08); }
+
+  @media (max-width: 900px) {
+    nav { display: none; }
+    main { padding: 32px 24px; }
+    h1 { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav>
+  <div class="nav-logo">
+    <div class="tag">OS Dev Path</div>
+    <h2>C Programming</h2>
+  </div>
+
+  <div class="nav-section-title">Foundations</div>
+  <a href="#intro">What is C?</a>
+  <a href="#setup">Setup & Hello World</a>
+  <a href="#variables">Variables & Types</a>
+  <a href="#operators">Operators</a>
+
+  <div class="nav-section-title">Control Flow</div>
+  <a href="#if">If / Else</a>
+  <a href="#loops">Loops</a>
+  <a href="#functions">Functions</a>
+
+  <div class="nav-section-title">Memory</div>
+  <a href="#arrays">Arrays</a>
+  <a href="#pointers">Pointers</a>
+  <a href="#malloc">Heap Memory</a>
+  <a href="#strings">Strings</a>
+
+  <div class="nav-section-title">Data Structures</div>
+  <a href="#structs">Structs</a>
+  <a href="#enums">Enums</a>
+
+  <div class="nav-section-title">OS Dev C</div>
+  <a href="#headers">Headers & Includes</a>
+  <a href="#freestanding">Freestanding C</a>
+  <a href="#bitops">Bit Operations</a>
+  <a href="#volatile">Volatile & MMIO</a>
+
+  <div class="nav-next">
+    <div class="nav-next-label">Next up</div>
+    <a href="asm.html">x86_64 Assembly →</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <!-- INTRO -->
+  <div class="section" id="intro">
+    <div class="section-num">Chapter 00</div>
+    <h1>C Programming</h1>
+    <p class="hero-sub">The language your OS will be written in. Learn it right, learn it deep.</p>
+    <div class="progress-row">
+      <span class="badge badge-green">Step 1 of 2</span>
+      <span class="badge badge-blue">OS Dev path</span>
+      <span class="badge badge-pink">Free forever</span>
+    </div>
+
+    <h2>What is C?</h2>
+    <p>C is the closest you can get to the hardware without writing Assembly. There's no garbage collector, no runtime managing memory for you. <strong>You control everything.</strong> That's exactly what OS development needs.</p>
+    <p>Linux, Windows, macOS — all written mostly in C. Your OS will be too.</p>
+
+    <div class="inst-grid">
+      <div class="cell">Fast</div>
+      <div class="cell">C compiles directly to machine code. No virtual machine, no interpreter. Raw speed.</div>
+      <div class="cell">Low level</div>
+      <div class="cell">You can read and write any memory address. Talk directly to hardware. Control every byte.</div>
+      <div class="cell">Portable</div>
+      <div class="cell">The same C code runs on x86, ARM, RISC-V. Your OS skills transfer everywhere.</div>
+      <div class="cell">Minimal</div>
+      <div class="cell">The language is tiny. No built-in classes, no bloat. You build everything from scratch.</div>
+    </div>
+  </div>
+
+  <!-- SETUP -->
+  <div class="section" id="setup">
+    <div class="section-num">Chapter 01</div>
+    <h2>Setup & Hello World</h2>
+    <p>All you need is GCC (the compiler) and a terminal. That's it.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">install gcc</span><span class="code-lang">bash</span></div>
+      <pre><span class="cmt"># Ubuntu / Debian</span>
+sudo apt install gcc
+
+<span class="cmt"># macOS</span>
+xcode-select --install</pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">hello.c</span><span class="code-lang">C</span></div>
+      <pre><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="fn">printf</span>(<span class="str">"Hello, World!\n"</span>);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">compile & run</span><span class="code-lang">bash</span></div>
+      <pre>gcc hello.c -o hello    <span class="cmt"># compile</span>
+./hello                  <span class="cmt"># run → prints: Hello, World!</span></pre>
+    </div>
+
+    <div class="callout">
+      <strong>Note for OS dev:</strong> In your actual OS, there's no <code style="font-family:JetBrains Mono,monospace">printf</code> or <code style="font-family:JetBrains Mono,monospace">stdio.h</code> — you write those yourself. But for learning C right now, use them freely.
+    </div>
+  </div>
+
+  <!-- VARIABLES -->
+  <div class="section" id="variables">
+    <div class="section-num">Chapter 02</div>
+    <h2>Variables & Types</h2>
+    <p>C is <strong>statically typed</strong> — every variable has a fixed type and you must declare it. The types map directly to sizes in memory.</p>
+
+    <table class="reg-table">
+      <thead><tr><th>Type</th><th>Size</th><th>What it holds</th></tr></thead>
+      <tbody>
+        <tr><td>char</td><td>1 byte</td><td>A single character or small integer (-128 to 127)</td></tr>
+        <tr><td>int</td><td>4 bytes</td><td>A whole number (-2 billion to 2 billion)</td></tr>
+        <tr><td>long</td><td>8 bytes</td><td>A bigger whole number</td></tr>
+        <tr><td>float</td><td>4 bytes</td><td>Decimal number (less precise)</td></tr>
+        <tr><td>double</td><td>8 bytes</td><td>Decimal number (more precise)</td></tr>
+        <tr><td>void</td><td>—</td><td>Nothing / no type. Used for functions that return nothing</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Fixed-width types — what OS dev actually uses</h3>
+    <p>In OS dev you need to know <em>exactly</em> how many bytes a variable takes. Use these instead of plain <code style="color:var(--accent);font-family:JetBrains Mono,monospace">int</code>:</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">os dev types</span><span class="code-lang">C</span></div>
+      <pre><span class="kw">#include</span> <span class="str">&lt;stdint.h&gt;</span>   <span class="cmt">// gives us fixed-width types</span>
+
+<span class="typ">uint8_t</span>   a = <span class="num">255</span>;      <span class="cmt">// 1 byte,  0 to 255</span>
+<span class="typ">uint16_t</span>  b = <span class="num">65535</span>;    <span class="cmt">// 2 bytes, 0 to 65535</span>
+<span class="typ">uint32_t</span>  c = <span class="num">100000</span>;   <span class="cmt">// 4 bytes</span>
+<span class="typ">uint64_t</span>  d = <span class="num">999999</span>;   <span class="cmt">// 8 bytes</span>
+
+<span class="typ">int8_t</span>    e = <span class="num">-10</span>;      <span class="cmt">// signed 1 byte, -128 to 127</span>
+<span class="typ">int32_t</span>   f = <span class="num">-50000</span>;   <span class="cmt">// signed 4 bytes</span>
+
+<span class="cmt">// In OS dev you'll use uint8_t, uint16_t, uint32_t, uint64_t constantly</span></pre>
+    </div>
+
+    <h3>Declaring variables</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">variables</span><span class="code-lang">C</span></div>
+      <pre><span class="typ">int</span> x = <span class="num">10</span>;           <span class="cmt">// declare and initialize</span>
+<span class="typ">int</span> y;                <span class="cmt">// declare only (value is undefined!)</span>
+y = <span class="num">20</span>;               <span class="cmt">// assign later</span>
+
+<span class="typ">int</span> a, b, c;          <span class="cmt">// multiple variables same type</span>
+a = b = c = <span class="num">0</span>;        <span class="cmt">// set all to 0</span>
+
+<span class="kw">const</span> <span class="typ">int</span> MAX = <span class="num">100</span>;  <span class="cmt">// constant — cannot change</span></pre>
+    </div>
+
+    <div class="callout pink">
+      <strong>Watch out:</strong> Uninitialized variables in C contain random garbage values — whatever bytes were in that memory before. Always initialize your variables, especially in OS code where bugs can crash the whole machine.
+    </div>
+  </div>
+
+  <!-- OPERATORS -->
+  <div class="section" id="operators">
+    <div class="section-num">Chapter 03</div>
+    <h2>Operators</h2>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">all operators</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// Arithmetic</span>
+<span class="typ">int</span> a = <span class="num">10</span> + <span class="num">5</span>;    <span class="cmt">// 15  — add</span>
+<span class="typ">int</span> b = <span class="num">10</span> - <span class="num">5</span>;    <span class="cmt">// 5   — subtract</span>
+<span class="typ">int</span> c = <span class="num">10</span> * <span class="num">5</span>;    <span class="cmt">// 50  — multiply</span>
+<span class="typ">int</span> d = <span class="num">10</span> / <span class="num">3</span>;    <span class="cmt">// 3   — divide (integer, drops remainder)</span>
+<span class="typ">int</span> e = <span class="num">10</span> % <span class="num">3</span>;    <span class="cmt">// 1   — modulo (remainder)</span>
+
+<span class="cmt">// Shorthand</span>
+a += <span class="num">5</span>;   <span class="cmt">// a = a + 5</span>
+a -= <span class="num">2</span>;   <span class="cmt">// a = a - 2</span>
+a++;      <span class="cmt">// a = a + 1</span>
+a--;      <span class="cmt">// a = a - 1</span>
+
+<span class="cmt">// Comparison (returns 1 for true, 0 for false)</span>
+a == b    <span class="cmt">// equal</span>
+a != b    <span class="cmt">// not equal</span>
+a &lt;  b    <span class="cmt">// less than</span>
+a &gt;  b    <span class="cmt">// greater than</span>
+a &lt;= b    <span class="cmt">// less or equal</span>
+a &gt;= b    <span class="cmt">// greater or equal</span>
+
+<span class="cmt">// Logical</span>
+a &amp;&amp; b    <span class="cmt">// AND — true if both are true</span>
+a || b    <span class="cmt">// OR  — true if at least one is true</span>
+!a        <span class="cmt">// NOT — flips true/false</span></pre>
+    </div>
+  </div>
+
+  <!-- IF ELSE -->
+  <div class="section" id="if">
+    <div class="section-num">Chapter 04</div>
+    <h2>If / Else</h2>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">if / else if / else</span><span class="code-lang">C</span></div>
+      <pre><span class="typ">int</span> score = <span class="num">85</span>;
+
+<span class="kw">if</span> (score >= <span class="num">90</span>) {
+    <span class="fn">printf</span>(<span class="str">"A grade\n"</span>);
+} <span class="kw">else if</span> (score >= <span class="num">70</span>) {
+    <span class="fn">printf</span>(<span class="str">"B grade\n"</span>);   <span class="cmt">// this runs</span>
+} <span class="kw">else</span> {
+    <span class="fn">printf</span>(<span class="str">"Try again\n"</span>);
+}
+
+<span class="cmt">// Switch statement — cleaner for many fixed cases</span>
+<span class="typ">int</span> day = <span class="num">3</span>;
+<span class="kw">switch</span> (day) {
+    <span class="kw">case</span> <span class="num">1</span>: <span class="fn">printf</span>(<span class="str">"Monday\n"</span>);    <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">2</span>: <span class="fn">printf</span>(<span class="str">"Tuesday\n"</span>);   <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="num">3</span>: <span class="fn">printf</span>(<span class="str">"Wednesday\n"</span>); <span class="kw">break</span>; <span class="cmt">// this runs</span>
+    <span class="kw">default</span>: <span class="fn">printf</span>(<span class="str">"Other\n"</span>);    <span class="kw">break</span>;
+}</pre>
+    </div>
+
+    <div class="callout">
+      <strong>Don't forget break!</strong> In a switch statement, if you leave out <code style="font-family:JetBrains Mono,monospace">break</code>, execution falls through to the next case. This causes hard-to-find bugs.
+    </div>
+  </div>
+
+  <!-- LOOPS -->
+  <div class="section" id="loops">
+    <div class="section-num">Chapter 05</div>
+    <h2>Loops</h2>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">for / while / do-while</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// FOR loop — when you know how many times</span>
+<span class="kw">for</span> (<span class="typ">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, i);   <span class="cmt">// prints 0 through 9</span>
+}
+
+<span class="cmt">// WHILE loop — when you don't know how many times</span>
+<span class="typ">int</span> x = <span class="num">0</span>;
+<span class="kw">while</span> (x &lt; <span class="num">5</span>) {
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);
+    x++;
+}
+
+<span class="cmt">// DO-WHILE — runs at least once</span>
+<span class="kw">do</span> {
+    <span class="fn">printf</span>(<span class="str">"runs at least once\n"</span>);
+    x++;
+} <span class="kw">while</span> (x &lt; <span class="num">3</span>);
+
+<span class="cmt">// Infinite loop — used everywhere in OS dev</span>
+<span class="kw">while</span> (<span class="num">1</span>) {
+    <span class="cmt">// kernel idle loop — runs forever</span>
+}
+
+<span class="cmt">// break and continue</span>
+<span class="kw">for</span> (<span class="typ">int</span> i = <span class="num">0</span>; i &lt; <span class="num">10</span>; i++) {
+    <span class="kw">if</span> (i == <span class="num">5</span>) <span class="kw">break</span>;     <span class="cmt">// exit loop entirely</span>
+    <span class="kw">if</span> (i == <span class="num">3</span>) <span class="kw">continue</span>;  <span class="cmt">// skip this iteration</span>
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, i);
+}</pre>
+    </div>
+  </div>
+
+  <!-- FUNCTIONS -->
+  <div class="section" id="functions">
+    <div class="section-num">Chapter 06</div>
+    <h2>Functions</h2>
+    <p>Functions in C must be declared before they're used. The format is: <code style="color:var(--accent2);font-family:JetBrains Mono,monospace">return_type name(parameters)</code>.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">functions</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// A function that adds two numbers and returns the result</span>
+<span class="typ">int</span> <span class="fn">add</span>(<span class="typ">int</span> a, <span class="typ">int</span> b) {
+    <span class="kw">return</span> a + b;
+}
+
+<span class="cmt">// A function that returns nothing (void)</span>
+<span class="typ">void</span> <span class="fn">print_hello</span>() {
+    <span class="fn">printf</span>(<span class="str">"Hello!\n"</span>);
+}
+
+<span class="cmt">// Calling functions</span>
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="typ">int</span> result = <span class="fn">add</span>(<span class="num">3</span>, <span class="num">7</span>);   <span class="cmt">// result = 10</span>
+    <span class="fn">print_hello</span>();             <span class="cmt">// prints Hello!</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="cmt">// Forward declaration — declare before defining</span>
+<span class="typ">int</span> <span class="fn">multiply</span>(<span class="typ">int</span> a, <span class="typ">int</span> b);   <span class="cmt">// just the signature</span>
+
+<span class="typ">int</span> <span class="fn">main</span>() {
+    <span class="fn">multiply</span>(<span class="num">4</span>, <span class="num">5</span>);             <span class="cmt">// works even though defined below</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}
+
+<span class="typ">int</span> <span class="fn">multiply</span>(<span class="typ">int</span> a, <span class="typ">int</span> b) {   <span class="cmt">// actual definition</span>
+    <span class="kw">return</span> a * b;
+}</pre>
+    </div>
+  </div>
+
+  <!-- ARRAYS -->
+  <div class="section" id="arrays">
+    <div class="section-num">Chapter 07</div>
+    <h2>Arrays</h2>
+    <p>An array is a block of memory holding multiple values of the same type, side by side. Arrays are <strong>zero-indexed</strong> — the first element is at index 0.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">arrays</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// Declare an array of 5 ints</span>
+<span class="typ">int</span> numbers[<span class="num">5</span>] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+
+numbers[<span class="num">0</span>]   <span class="cmt">// = 10  (first element)</span>
+numbers[<span class="num">4</span>]   <span class="cmt">// = 50  (last element)</span>
+numbers[<span class="num">5</span>]   <span class="cmt">// ❌ DANGER — out of bounds! Undefined behavior</span>
+
+<span class="cmt">// Loop through an array</span>
+<span class="kw">for</span> (<span class="typ">int</span> i = <span class="num">0</span>; i &lt; <span class="num">5</span>; i++) {
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, numbers[i]);
+}
+
+<span class="cmt">// Array of chars = a string</span>
+<span class="typ">char</span> name[<span class="num">6</span>] = {<span class="str">'H'</span>, <span class="str">'e'</span>, <span class="str">'l'</span>, <span class="str">'l'</span>, <span class="str">'o'</span>, <span class="str">'\0'</span>};
+<span class="cmt">//                                              ↑ null terminator — marks the end</span>
+
+<span class="cmt">// 2D array (like a grid)</span>
+<span class="typ">int</span> grid[<span class="num">3</span>][<span class="num">3</span>] = {
+    {<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>},
+    {<span class="num">4</span>, <span class="num">5</span>, <span class="num">6</span>},
+    {<span class="num">7</span>, <span class="num">8</span>, <span class="num">9</span>}
+};
+grid[<span class="num">1</span>][<span class="num">2</span>]  <span class="cmt">// = 6  (row 1, column 2)</span></pre>
+    </div>
+  </div>
+
+  <!-- POINTERS -->
+  <div class="section" id="pointers">
+    <div class="section-num">Chapter 08</div>
+    <h2>Pointers</h2>
+    <p>Pointers are the most important concept in C — and the one most people struggle with. A pointer is simply a variable that <strong>holds a memory address</strong> instead of a value.</p>
+    <p>In OS dev you use pointers constantly — to talk to hardware registers, to manage memory, to build data structures.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">pointers basics</span><span class="code-lang">C</span></div>
+      <pre><span class="typ">int</span> x = <span class="num">42</span>;
+<span class="typ">int</span>* p = &amp;x;     <span class="cmt">// p holds the ADDRESS of x</span>
+                  <span class="cmt">// &amp; means "address of"</span>
+
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);    <span class="cmt">// prints 42   (the value)</span>
+<span class="fn">printf</span>(<span class="str">"%p\n"</span>, p);    <span class="cmt">// prints address like 0x7fff5abc</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, *p);   <span class="cmt">// prints 42   (* means "value at this address")</span>
+
+*p = <span class="num">100</span>;             <span class="cmt">// change x through the pointer</span>
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, x);    <span class="cmt">// now prints 100!</span></pre>
+    </div>
+
+    <h3>Pointers and OS Dev Hardware</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">hardware pointers</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// In OS dev, hardware is at fixed memory addresses.</span>
+<span class="cmt">// You just point at the address and write to it.</span>
+
+<span class="cmt">// VGA text buffer — writing here puts text on screen</span>
+<span class="typ">uint16_t</span>* vga = (<span class="typ">uint16_t</span>*)<span class="num">0xB8000</span>;
+vga[<span class="num">0</span>] = <span class="num">0x0F00</span> | <span class="str">'H'</span>;   <span class="cmt">// write 'H' in white on black</span>
+vga[<span class="num">1</span>] = <span class="num">0x0F00</span> | <span class="str">'i'</span>;   <span class="cmt">// write 'i'</span>
+
+<span class="cmt">// That's it. No library. No function call. Just a pointer write.</span></pre>
+    </div>
+
+    <h3>Pointer Arithmetic</h3>
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">pointer arithmetic</span><span class="code-lang">C</span></div>
+      <pre><span class="typ">int</span> arr[<span class="num">5</span>] = {<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>};
+<span class="typ">int</span>* p = arr;    <span class="cmt">// p points to arr[0]</span>
+
+*p       <span class="cmt">// = 10  (arr[0])</span>
+*(p+<span class="num">1</span>)   <span class="cmt">// = 20  (arr[1]) — pointer moves by sizeof(int) = 4 bytes</span>
+*(p+<span class="num">2</span>)   <span class="cmt">// = 30  (arr[2])</span>
+
+p++;     <span class="cmt">// move pointer to next element</span>
+*p       <span class="cmt">// = 20 now</span></pre>
+    </div>
+
+    <div class="callout blue">
+      <strong>Key insight:</strong> An array name in C <em>is</em> a pointer to the first element. <code style="font-family:JetBrains Mono,monospace">arr[2]</code> and <code style="font-family:JetBrains Mono,monospace">*(arr+2)</code> are identical. This is why pointers and arrays feel the same in C.
+    </div>
+  </div>
+
+  <!-- MALLOC -->
+  <div class="section" id="malloc">
+    <div class="section-num">Chapter 09</div>
+    <h2>Heap Memory</h2>
+    <p>Variables declared normally live on the <strong>stack</strong> — they disappear when the function returns. If you need memory that persists longer, you allocate it on the <strong>heap</strong> using <code style="color:var(--accent);font-family:JetBrains Mono,monospace">malloc</code>.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">malloc & free</span><span class="code-lang">C</span></div>
+      <pre><span class="kw">#include</span> <span class="str">&lt;stdlib.h&gt;</span>   <span class="cmt">// for malloc and free</span>
+
+<span class="cmt">// Allocate space for 10 ints on the heap</span>
+<span class="typ">int</span>* arr = (<span class="typ">int</span>*) <span class="fn">malloc</span>(<span class="num">10</span> * <span class="kw">sizeof</span>(<span class="typ">int</span>));
+
+<span class="kw">if</span> (arr == <span class="num">NULL</span>) {
+    <span class="cmt">// malloc failed — always check!</span>
+    <span class="kw">return</span> <span class="num">-1</span>;
+}
+
+arr[<span class="num">0</span>] = <span class="num">100</span>;   <span class="cmt">// use it just like a normal array</span>
+arr[<span class="num">1</span>] = <span class="num">200</span>;
+
+<span class="fn">free</span>(arr);      <span class="cmt">// ALWAYS free when done — or you leak memory</span>
+arr = <span class="num">NULL</span>;     <span class="cmt">// good habit — null the pointer after freeing</span></pre>
+    </div>
+
+    <div class="callout pink">
+      <strong>In OS dev:</strong> There's no <code style="font-family:JetBrains Mono,monospace">malloc</code> in your kernel until YOU write one. That's actually one of the first things you'll build — a memory allocator. This is where it gets fun.
+    </div>
+  </div>
+
+  <!-- STRINGS -->
+  <div class="section" id="strings">
+    <div class="section-num">Chapter 10</div>
+    <h2>Strings</h2>
+    <p>In C there's no built-in string type. A string is just an array of <code style="color:var(--accent);font-family:JetBrains Mono,monospace">char</code> ending with a <strong>null terminator</strong> <code style="color:var(--accent3);font-family:JetBrains Mono,monospace">'\0'</code>. That zero byte tells functions where the string ends.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">strings in C</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// String literal — stored in read-only memory</span>
+<span class="typ">char</span>* msg = <span class="str">"Hello"</span>;   <span class="cmt">// = {'H','e','l','l','o','\0'}</span>
+
+<span class="cmt">// Char array — stored on the stack, can be modified</span>
+<span class="typ">char</span> buf[<span class="num">6</span>] = <span class="str">"Hello"</span>;
+buf[<span class="num">0</span>] = <span class="str">'h'</span>;   <span class="cmt">// ok — modifiable</span>
+
+<span class="cmt">// String length — count until '\0'</span>
+<span class="kw">#include</span> <span class="str">&lt;string.h&gt;</span>
+<span class="typ">int</span> len = <span class="fn">strlen</span>(<span class="str">"Hello"</span>);   <span class="cmt">// = 5 (doesn't count the \0)</span>
+
+<span class="cmt">// Writing your own strlen — this is what OS dev feels like</span>
+<span class="typ">int</span> <span class="fn">my_strlen</span>(<span class="typ">char</span>* s) {
+    <span class="typ">int</span> i = <span class="num">0</span>;
+    <span class="kw">while</span> (s[i] != <span class="str">'\0'</span>) i++;
+    <span class="kw">return</span> i;
+}</pre>
+    </div>
+  </div>
+
+  <!-- STRUCTS -->
+  <div class="section" id="structs">
+    <div class="section-num">Chapter 11</div>
+    <h2>Structs</h2>
+    <p>A struct groups related variables together under one name. In OS dev you'll use structs for everything — process control blocks, memory descriptors, driver state, interrupt frames.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">structs</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// Define a struct</span>
+<span class="kw">struct</span> <span class="typ">Process</span> {
+    <span class="typ">uint32_t</span>  pid;        <span class="cmt">// process ID</span>
+    <span class="typ">uint64_t</span>  stack_ptr;  <span class="cmt">// stack pointer</span>
+    <span class="typ">char</span>      name[<span class="num">32</span>];   <span class="cmt">// process name</span>
+    <span class="typ">uint8_t</span>   state;      <span class="cmt">// running, sleeping, etc</span>
+};
+
+<span class="cmt">// Create and use a struct</span>
+<span class="kw">struct</span> <span class="typ">Process</span> p;
+p.pid       = <span class="num">1</span>;
+p.stack_ptr = <span class="num">0x7FFF0000</span>;
+p.state     = <span class="num">1</span>;
+
+<span class="cmt">// typedef — cleaner syntax (no need to write 'struct' each time)</span>
+<span class="kw">typedef struct</span> {
+    <span class="typ">uint32_t</span> pid;
+    <span class="typ">uint8_t</span>  state;
+} <span class="typ">Process</span>;
+
+<span class="typ">Process</span> p2;   <span class="cmt">// much cleaner!</span>
+p2.pid = <span class="num">2</span>;
+
+<span class="cmt">// Pointer to struct — use arrow (->) instead of dot (.)</span>
+<span class="typ">Process</span>* ptr = &amp;p2;
+ptr->pid     = <span class="num">3</span>;    <span class="cmt">// same as (*ptr).pid = 3</span>
+ptr->state   = <span class="num">0</span>;</pre>
+    </div>
+  </div>
+
+  <!-- ENUMS -->
+  <div class="section" id="enums">
+    <div class="section-num">Chapter 12</div>
+    <h2>Enums</h2>
+    <p>Enums give names to numbers. Instead of remembering that state 0 means "running" and state 1 means "sleeping", you write the words directly.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">enums</span><span class="code-lang">C</span></div>
+      <pre><span class="kw">typedef enum</span> {
+    PROCESS_RUNNING  = <span class="num">0</span>,
+    PROCESS_SLEEPING = <span class="num">1</span>,
+    PROCESS_DEAD     = <span class="num">2</span>
+} <span class="typ">ProcessState</span>;
+
+<span class="typ">ProcessState</span> state = PROCESS_RUNNING;
+
+<span class="kw">if</span> (state == PROCESS_RUNNING) {
+    <span class="cmt">// much clearer than:  if (state == 0)</span>
+}</pre>
+    </div>
+  </div>
+
+  <!-- HEADERS -->
+  <div class="section" id="headers">
+    <div class="section-num">Chapter 13</div>
+    <h2>Headers & Includes</h2>
+    <p>Header files (<code style="color:var(--accent);font-family:JetBrains Mono,monospace">.h</code>) contain declarations — function signatures, struct definitions, constants. Source files (<code style="color:var(--accent);font-family:JetBrains Mono,monospace">.c</code>) contain the actual code. This is how you split a big project across multiple files.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">kernel.h</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// kernel.h — declarations only</span>
+<span class="kw">#ifndef</span> KERNEL_H    <span class="cmt">// include guard — prevents double-including</span>
+<span class="kw">#define</span> KERNEL_H
+
+<span class="kw">#include</span> <span class="str">&lt;stdint.h&gt;</span>
+
+<span class="kw">void</span>     <span class="fn">kernel_main</span>();
+<span class="typ">void</span>     <span class="fn">print_char</span>(<span class="typ">char</span> c, <span class="typ">uint8_t</span> color);
+<span class="typ">uint32_t</span> <span class="fn">get_tick</span>();
+
+<span class="kw">#define</span> VGA_ADDRESS <span class="num">0xB8000</span>
+<span class="kw">#define</span> VGA_WHITE   <span class="num">0x0F</span>
+
+<span class="kw">#endif</span></pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">kernel.c</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// kernel.c — actual implementations</span>
+<span class="kw">#include</span> <span class="str">"kernel.h"</span>   <span class="cmt">// your own header — use quotes</span>
+
+<span class="typ">void</span> <span class="fn">print_char</span>(<span class="typ">char</span> c, <span class="typ">uint8_t</span> color) {
+    <span class="typ">uint16_t</span>* vga = (<span class="typ">uint16_t</span>*) VGA_ADDRESS;
+    vga[<span class="num">0</span>] = (color &lt;&lt; <span class="num">8</span>) | c;
+}
+
+<span class="typ">void</span> <span class="fn">kernel_main</span>() {
+    <span class="fn">print_char</span>(<span class="str">'!'</span>, VGA_WHITE);
+    <span class="kw">while</span>(<span class="num">1</span>);
+}</pre>
+    </div>
+  </div>
+
+  <!-- FREESTANDING -->
+  <div class="section" id="freestanding">
+    <div class="section-num">Chapter 14</div>
+    <h2>Freestanding C</h2>
+    <p>Normal C programs run on top of an OS which provides <code style="color:var(--accent);font-family:JetBrains Mono,monospace">printf</code>, <code style="color:var(--accent);font-family:JetBrains Mono,monospace">malloc</code>, and all the standard library. In OS dev <strong>there is no OS underneath you.</strong> You compile in "freestanding" mode.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">freestanding compile flags</span><span class="code-lang">bash</span></div>
+      <pre>gcc -ffreestanding   <span class="cmt"># no standard library</span>
+    -nostdlib        <span class="cmt"># no startup files</span>
+    -nostdinc        <span class="cmt"># no standard headers</span>
+    -fno-builtin     <span class="cmt"># no built-in functions</span>
+    -m64             <span class="cmt"># 64-bit output</span>
+    kernel.c -o kernel.o</pre>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">what you CAN still use</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// These headers work in freestanding mode:</span>
+<span class="kw">#include</span> <span class="str">&lt;stdint.h&gt;</span>    <span class="cmt">// uint8_t, uint32_t etc</span>
+<span class="kw">#include</span> <span class="str">&lt;stddef.h&gt;</span>    <span class="cmt">// NULL, size_t</span>
+<span class="kw">#include</span> <span class="str">&lt;stdbool.h&gt;</span>   <span class="cmt">// bool, true, false</span>
+
+<span class="cmt">// Everything else — you write yourself.</span>
+<span class="cmt">// No printf. No malloc. No memcpy.</span>
+<span class="cmt">// That's the point. You own everything.</span></pre>
+    </div>
+  </div>
+
+  <!-- BIT OPS -->
+  <div class="section" id="bitops">
+    <div class="section-num">Chapter 15</div>
+    <h2>Bit Operations</h2>
+    <p>In OS dev you manipulate hardware registers one bit at a time. A single byte controls 8 on/off features. You need to set, clear, and test individual bits without touching the others.</p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">bit manipulation</span><span class="code-lang">C</span></div>
+      <pre><span class="typ">uint8_t</span> flags = <span class="num">0b00000000</span>;   <span class="cmt">// all bits off</span>
+
+<span class="cmt">// SET bit 3 (turn it ON)</span>
+flags |= (<span class="num">1</span> &lt;&lt; <span class="num">3</span>);    <span class="cmt">// flags = 0b00001000</span>
+
+<span class="cmt">// CLEAR bit 3 (turn it OFF)</span>
+flags &amp;= ~(<span class="num">1</span> &lt;&lt; <span class="num">3</span>);   <span class="cmt">// flags = 0b00000000</span>
+
+<span class="cmt">// TOGGLE bit 3 (flip it)</span>
+flags ^= (<span class="num">1</span> &lt;&lt; <span class="num">3</span>);    <span class="cmt">// flips bit 3</span>
+
+<span class="cmt">// TEST bit 3 (is it on?)</span>
+<span class="kw">if</span> (flags &amp; (<span class="num">1</span> &lt;&lt; <span class="num">3</span>)) {
+    <span class="cmt">// bit 3 is set</span>
+}
+
+<span class="cmt">// Real example — VGA color byte</span>
+<span class="cmt">// bits [7:4] = background color, bits [3:0] = foreground color</span>
+<span class="typ">uint8_t</span> color = (<span class="num">0</span> &lt;&lt; <span class="num">4</span>) | <span class="num">15</span>;   <span class="cmt">// black bg, white fg = 0x0F</span></pre>
+    </div>
+  </div>
+
+  <!-- VOLATILE -->
+  <div class="section" id="volatile">
+    <div class="section-num">Chapter 16</div>
+    <h2>Volatile & Memory-Mapped I/O</h2>
+    <p>The compiler is smart — it caches values in registers to avoid reading memory repeatedly. But hardware registers change on their own. You must use <code style="color:var(--accent3);font-family:JetBrains Mono,monospace">volatile</code> to tell the compiler <em>"always read this from memory, never cache it."</em></p>
+
+    <div class="code-block">
+      <div class="code-header"><span class="code-label">volatile</span><span class="code-lang">C</span></div>
+      <pre><span class="cmt">// WITHOUT volatile — compiler might optimize this to only read once</span>
+<span class="typ">uint32_t</span>* status_reg = (<span class="typ">uint32_t</span>*)<span class="num">0xFEE00000</span>;
+<span class="kw">while</span> (*status_reg == <span class="num">0</span>);   <span class="cmt">// might loop forever — compiler cached 0!</span>
+
+<span class="cmt">// WITH volatile — compiler reads from address every single time</span>
+<span class="kw">volatile</span> <span class="typ">uint32_t</span>* status_reg = (<span class="kw">volatile</span> <span class="typ">uint32_t</span>*)<span class="num">0xFEE00000</span>;
+<span class="kw">while</span> (*status_reg == <span class="num">0</span>);   <span class="cmt">// correctly waits for hardware to change it</span>
+
+<span class="cmt">// Rule: any pointer to a hardware register should be volatile</span></pre>
+    </div>
+
+    <div class="callout">
+      <strong>This is one of the most common OS dev bugs.</strong> Code looks correct, but the compiler "optimizes" away your hardware reads. When in doubt with hardware — use <code style="font-family:JetBrains Mono,monospace">volatile</code>.
+    </div>
+
+    <div class="callout blue" style="margin-top: 48px;">
+      <strong>You're ready.</strong> You now know enough C to write a real OS kernel. The next step is learning the tiny bit of Assembly needed to boot it. Go to the ASM tutorial when you're ready. →
+    </div>
+
+    <a href="asm.html" style="display:inline-flex;align-items:center;gap:10px;margin-top:24px;padding:14px 28px;background:var(--accent);color:var(--bg);text-decoration:none;font-weight:700;font-size:14px;border-radius:8px;font-family:'Space Grotesk',sans-serif;transition:all 0.15s;" onmouseover="this.style.background='white'" onmouseout="this.style.background='var(--accent)'">
+      Next: x86_64 Assembly →
+    </a>
+  </div>
+
+</main>
+</div>
+
+<button class="scrolltop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const links = document.querySelectorAll('nav a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    links.forEach(l => {
+      l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+</body>
+</html>
